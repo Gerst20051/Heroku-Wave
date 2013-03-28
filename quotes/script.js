@@ -187,11 +187,15 @@ doSearch: function(){
 	Hash.set('q',val);
 	if (2 < val.length && val != this.searchQuery) {
 		this.searchQuery = val;
-		var p = Hash.get('p');
+		var type = Hash.get('p'), p = "";
 		if (Hash.has('p')) {
-
+			if (Hash) {
+				p = Hash.get('p');
+			}
+		} else {
+			p = "global";
 		}
-		$.getJSON(this.ajaxurl, {action:"search",type:,query:this.searchQuery}, function(response){
+		$.getJSON(this.ajaxurl, {action:"search",type:p,query:this.searchQuery}, function(response){
 			console.log(response);
 		});
 	} else if (0 == val.length) {
