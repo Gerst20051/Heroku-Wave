@@ -183,7 +183,7 @@ onKeyDown: function(e){
 	}
 },
 doSearch: function(){
-	var val = $.trim($("#search").val().replace(/[^a-zA-Z 0-9,.]+/g,'').replace('   ',' ').replace('  ',' '));
+	var self = this, val = $.trim($("#search").val().replace(/[^a-zA-Z 0-9,.]+/g,'').replace('   ',' ').replace('  ',' '));
 	Hash.set('q',val);
 	if (2 < val.length && val != this.searchQuery) {
 		this.searchQuery = val;
