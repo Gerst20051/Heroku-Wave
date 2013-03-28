@@ -30,9 +30,12 @@ registerFocus: false,
 user: {},
 quotes: [],
 search: [],
+searchQuery: "",
+sresultLength: 0,
 init: function(){
 	if (this.loaded !== false) return;
 	var self = this;
+	Hash.parse();
 	$.getJSON(this.ajaxurl, {action:"logged"}, function(response){
 		self.loaded = true;
 		if (response.logged === true) {
@@ -54,8 +57,7 @@ loggedIn: function(){
 			$("#login-button").hide();
 			$("body").addClass("in").removeClass("out");
 			$("#nav").slideDown();
-			//alert("Hello "+HNS.user.fullname+" welcome to our website!");
-			if (getHash() === "") setHash("home");
+			if (!Hash.has('p')) Hash.set('p','home');
 			self.handleHash();
 		} else self.logout();
 	});
@@ -99,8 +101,7 @@ logout: function(){
 		if (!stringToBoolean(response.logged)) {
 			self.logged = false;
 			self.user = {};
-			clearHash();
-			// Hash.clear();
+			Hash.clear();
 			self.loggedOut();
 		}
 	});
@@ -181,9 +182,28 @@ onKeyDown: function(e){
 		}
 	}
 },
+doSearch: function(){
+	var val = $.trim($("#search").val().replace(/[^a-zA-Z 0-9]+/g,'').replace('   ',' ').replace('  ',' '));
+	Hash.set('q',val);
+	if (2 < val.length && val != this.searchQuery) {
+		this.searchQuery = val;
+		var p = Hash.get('p');
+		if (Hash.has('p')) {
+
+		}
+		$.getJSON(this.ajaxurl, {action:"search",type:,query:this.searchQuery}, function(response){
+			console.log(response);
+		});
+	} else if (0 == val.length) {
+		this.searchQuery = "";
+		this.sresultLength = 0;
+		$("#sresultcount").empty();
+		this.handleHash();
+	}
+},
 handleHash: function(){
-	var self = this, hash = getHash();
-	if (hash == "" || hash == "global") {
+	var self = this, p = Hash.get('p');
+	if (p == "" || p == "global") {
 		$.getJSON(this.ajaxurl, {type:"global"}, function(response){
 			if ($.isArray(response)) {
 				self.quotes = response;
@@ -197,21 +217,37 @@ handleHash: function(){
 				$("#quotes").html('<li class="empty">No Quotes</li>');
 			}
 		});
-	} else if (hash == "user") {
-		$.getJSON(this.ajaxurl, {type:"user"}, function(response){
-			if ($.isArray(response)) {
-				self.quotes = response;
-				var quotes = "";
-				$.each(response, function(i,v){
-					var quote = v.quote;
-					quotes += self.listQuote(v.id,quote.name,quote.quote);
-				});
-				$("#quotes").html(quotes);
-			} else {
-				$("#quotes").html('<li class="empty">No Quotes</li>');
-			}
-		});
-	} else if (hash == "home") {
+	} else if (p == "user") {
+		if (Hash.has('id')) {
+			$.getJSON(this.ajaxurl, {type:"user",id:Hash.get('id')}, function(response){
+				if ($.isArray(response)) {
+					self.quotes = response;
+					var quotes = "";
+					$.each(response, function(i,v){
+						var quote = v.quote;
+						quotes += self.listQuote(v.id,quote.name,quote.quote);
+					});
+					$("#quotes").html(quotes);
+				} else {
+					$("#quotes").html('<li class="empty">No Quotes</li>');
+				}
+			});
+		} else {
+			$.getJSON(this.ajaxurl, {type:"user"}, function(response){
+				if ($.isArray(response)) {
+					self.quotes = response;
+					var quotes = "";
+					$.each(response, function(i,v){
+						var quote = v.quote;
+						quotes += self.listQuote(v.id,quote.name,quote.quote);
+					});
+					$("#quotes").html(quotes);
+				} else {
+					$("#quotes").html('<li class="empty">No Quotes</li>');
+				}
+			});
+		}
+	} else if (p == "home") {
 		$.getJSON(this.ajaxurl, {type:"user"}, function(response){
 			if ($.isArray(response)) {
 				self.quotes = response;
@@ -219,20 +255,6 @@ handleHash: function(){
 				$.each(response, function(i,v){
 					var quote = v.quote;
 					quotes += self.addQuote(v.id,quote.name,quote.quote);
-				});
-				$("#quotes").html(quotes);
-			} else {
-				$("#quotes").html('<li class="empty">No Quotes</li>');
-			}
-		});
-	} else if (parseHash().id) {
-		$.getJSON(this.ajaxurl, {id:parseHash().id}, function(response){
-			if ($.isArray(response)) {
-				self.quotes = response;
-				var quotes = "";
-				$.each(response, function(i,v){
-					var quote = v.quote;
-					quotes += self.listQuote(v.id,quote.name,quote.quote);
 				});
 				$("#quotes").html(quotes);
 			} else {
@@ -284,17 +306,18 @@ dom: function(){
 	});
 	$("#nav").on('click','.home-link',function(){
 		$(this).parent().find(".selected").removeClass("selected").end().end().addClass("selected");
-		setHash("home");
+		Hash.set('p','home');
 		self.handleHash();
 	});
 	$("#nav").on('click','.myquotes-link',function(){
 		$(this).parent().find(".selected").removeClass("selected").end().end().addClass("selected");
-		setHash("?id="+self.user.uid);
+		Hash.set('p','user');
+		Hash.set('id',self.user.uid);
 		self.handleHash();
 	});
 	$("#nav").on('click','.globalfeed-link',function(){
 		$(this).parent().find(".selected").removeClass("selected").end().end().addClass("selected");
-		setHash("global");
+		Hash.set('p','global');
 		self.handleHash();
 	});
 	$("#nav").on('click','.logout-link',function(){
@@ -307,15 +330,8 @@ dom: function(){
 		$.scrollTo(0, 1000);
 	});
 	$("article > header").on('keyup','#search',function(){
-		self.search.splice(0,this.length);
-		if (0 < self.quotes.length){
-			$.each(self.quotes, function(i,v){
-				if (-1 < v.name.indexOf($(this).val())) self.search.push(i);
-			});
-			$.each(self.search, function(i,v){
-				alert(v);
-			});
-		}
+		alert($(this).val());
+		self.doSearch();
 	});
 	$("article > header").on('click','#logoaction',function(){
 		var name = $.trim($("article > header #search").val());
