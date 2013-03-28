@@ -227,7 +227,7 @@ doSearch: function(){
 },
 handleHash: function(){
 	var self = this, p = Hash.get('p'), q = Hash.get('q');
-	if (2 < q.length) {
+	if (Hash.has('q') && 2 < q.length) {
 		$("#search").val(Hash.get('q'));
 		this.doSearch();
 		return false;
