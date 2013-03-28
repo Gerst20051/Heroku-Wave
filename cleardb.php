@@ -52,7 +52,7 @@ if ($db) {
 	}
 }
 
-$CREATETABLES = false;
+$CREATETABLES = true;
 
 if ($CREATETABLES) {
 	$query = 'CREATE TABLE `users` (
@@ -91,7 +91,7 @@ if ($CREATETABLES) {
 	}
 }
 
-$ALTERTABLES = false;
+$ALTERTABLES = true;
 
 if ($ALTERTABLES) {
 	/*
