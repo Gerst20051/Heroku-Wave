@@ -312,17 +312,20 @@ dom: function(){
 	});
 	$("#nav").on('click','.home-link',function(){
 		$(this).parent().find(".selected").removeClass("selected").end().end().addClass("selected");
+		Hash.clear();
 		Hash.set('p','home');
 		self.handleHash();
 	});
 	$("#nav").on('click','.myquotes-link',function(){
 		$(this).parent().find(".selected").removeClass("selected").end().end().addClass("selected");
+		Hash.clear();
 		Hash.set('p','user');
 		Hash.set('id',self.user.uid);
 		self.handleHash();
 	});
 	$("#nav").on('click','.globalfeed-link',function(){
 		$(this).parent().find(".selected").removeClass("selected").end().end().addClass("selected");
+		Hash.clear();
 		Hash.set('p','global');
 		self.handleHash();
 	});
