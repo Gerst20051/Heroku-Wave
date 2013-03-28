@@ -5,8 +5,10 @@ $username = $url["user"];
 $password = $url["pass"];
 $db = substr($url["path"],1);
 
-echo "<pre>".print_r($url)."</pre>";
-echo "<p>/applications/xampp/xamppfiles/bin/mysql -u $user -p $db -h $server < heroku/hnswave/input.sql > heroku/hnswave/output.txt";
+echo "<pre>";
+print_r($url);
+echo "</pre>";
+echo "<p>/applications/xampp/xamppfiles/bin/mysql -u $username -p $db -h $server < heroku/hnswave/input.sql > heroku/hnswave/output.txt</p>\n";
 
 $link = mysql_connect($server, $username, $password);
 
@@ -39,7 +41,7 @@ if ($db) {
 		echo "<p>Successfully connected to the database '" . $db . "'</p>\n";
 		$sql = "SHOW TABLES FROM `$db`";
 		$result = mysql_query($sql);
-		if (0 < mysql_num_rows($result)) {
+		if (mysql_num_rows($result)) {
 			echo "<p>Available tables:</p>\n";
 			echo "<pre>\n";
 			while ($row = mysql_fetch_row($result)) {
