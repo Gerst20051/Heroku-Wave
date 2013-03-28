@@ -229,7 +229,7 @@ handleHash: function(){
 	var self = this, p = Hash.get('p'), q = Hash.get('q');
 	if (2 < q.length) {
 		$("#search").val(Hash.get('q'));
-		doSearch();
+		this.doSearch();
 		return false;
 	}
 	if (p == "" || p == "global") {
