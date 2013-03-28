@@ -194,12 +194,12 @@ if ($ACTION == 'logged') {
 	try {
 		$db = new MySQL();
 		if ($TYPE == 'global') {
-			$db->sfquery(array('SELECT * FROM `%s` WHERE quote LIKE "%'.$QUERY.'%"',MYSQL_TABLE));
+			$db->sfquery(array('SELECT * FROM `%s` WHERE quote REGEX "'.$QUERY.'"',MYSQL_TABLE));
 		} elseif ($TYPE == 'user') {
 			if (!empty($ID)) {
-				$db->sfquery(array('SELECT * FROM `%s` WHERE quote LIKE "%'.$QUERY.'%" AND owner_id = %s',MYSQL_TABLE,$ID));
+				$db->sfquery(array('SELECT * FROM `%s` WHERE quote REGEX "'.$QUERY.'" AND owner_id = %s',MYSQL_TABLE,$ID));
 			} else {
-				$db->sfquery(array('SELECT * FROM `%s` WHERE quote LIKE "%'.$QUERY.'%" AND owner_id = %s',MYSQL_TABLE,$UID));
+				$db->sfquery(array('SELECT * FROM `%s` WHERE quote REGEX "'.$QUERY.'" AND owner_id = %s',MYSQL_TABLE,$UID));
 			}
 		}
 		if ($db->numRows()) {
