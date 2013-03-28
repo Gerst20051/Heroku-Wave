@@ -52,7 +52,7 @@ if ($db) {
 	}
 }
 
-$CREATETABLES = true;
+$CREATETABLES = false;
 
 if ($CREATETABLES) {
 	$query = 'CREATE TABLE `users` (
@@ -91,7 +91,7 @@ if ($CREATETABLES) {
 	}
 }
 
-$ALTERTABLES = true;
+$ALTERTABLES = false;
 
 if ($ALTERTABLES) {
 	/*
@@ -102,19 +102,5 @@ if ($ALTERTABLES) {
 		echo mysql_error() . "\n";
 	}
 	*/
-
-	$query = "INSERT INTO `users` VALUES(1, 'gerst20051@gmail.com', '10511002359e132ecdb3e743bb6ffdb72eb1ba6ad1d99baa1fa32a6cc63ecdb18ac99922a99660ba5926bdaefb52f2e2beeb7665bd7a230e883fa951718647a56d797432a4c4a0b64f7dcd4c7af65fdb3ef6a825697af9dc3c595eaefff5d0a24c94b68155d0d750f7d78b4be4d431adc9426db2d9a308b8c593afd8e1b8f385', 'f74df8dc1176051808ce4455f4c60f20eedb92f8a9f421bb877382a117005697', 'andrew', 'Andrew', 'Gerst', 2, 1364415928, 1364263211, 5);";
-
-	$result = mysql_query($query);
-	if (!$result) {
-		echo mysql_error() . "\n";
-	}
-
-	$query = 'INSERT INTO `quotes` VALUES(1, 1, \'{"name":"Shakespeare","quote":"If music be the food of love, play on."}\', 1351413690);';
-
-	$result = mysql_query($query);
-	if (!$result) {
-		echo mysql_error() . "\n";
-	}
 }
 ?>
