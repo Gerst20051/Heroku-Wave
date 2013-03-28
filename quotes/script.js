@@ -183,7 +183,7 @@ onKeyDown: function(e){
 	}
 },
 doSearch: function(){
-	var val = $.trim($("#search").val().replace(/[^a-zA-Z 0-9]+/g,'').replace('   ',' ').replace('  ',' '));
+	var val = $.trim($("#search").val().replace(/[^a-zA-Z 0-9,.]+/g,'').replace('   ',' ').replace('  ',' '));
 	Hash.set('q',val);
 	if (2 < val.length && val != this.searchQuery) {
 		this.searchQuery = val;
@@ -198,7 +198,25 @@ doSearch: function(){
 			p = "global";
 		}
 		$.getJSON(this.ajaxurl, {action:"search",type:p,query:this.searchQuery}, function(response){
-			console.log(response);
+			if ($.isArray(response)) {
+				self.quotes = response;
+				var quotes = "";
+				p = Hash.get('p');
+				if (p == "" || p == "global" || p == "user") {
+					$.each(response, function(i,v){
+						var quote = v.quote;
+						quotes += self.listQuote(v.id,quote.name,quote.quote);
+					});
+				} else {
+					$.each(response, function(i,v){
+						var quote = v.quote;
+						quotes += self.addQuote(v.id,quote.name,quote.quote);
+					});
+				}
+				$("#quotes").html(quotes);
+			} else {
+				$("#quotes").html('<li class="empty">No Quotes</li>');
+			}
 		});
 	} else if (0 == val.length) {
 		this.searchQuery = "";
