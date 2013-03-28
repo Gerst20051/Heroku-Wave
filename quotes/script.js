@@ -339,7 +339,6 @@ dom: function(){
 		$.scrollTo(0, 1000);
 	});
 	$("article > header").on('keyup','#search',function(){
-		alert($(this).val());
 		self.doSearch();
 	});
 	$("article > header").on('click','#logoaction',function(){
