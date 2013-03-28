@@ -189,8 +189,10 @@ doSearch: function(){
 		this.searchQuery = val;
 		var type = Hash.get('p'), p = "";
 		if (Hash.has('p')) {
-			if (Hash) {
+			if (type == "user" || type == "global") {
 				p = Hash.get('p');
+			} else {
+				Hash.set('p','global');
 			}
 		} else {
 			p = "global";

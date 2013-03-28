@@ -195,7 +195,7 @@ if ($ACTION == 'logged') {
 		$db = new MySQL();
 		if ($TYPE == 'global') {
 			$db->sfquery(array('SELECT * FROM `%s` WHERE quote LIKE "%%s%"',MYSQL_TABLE,$QUERY));
-		} else if ($TYPE == 'user') {
+		} elseif ($TYPE == 'user') {
 			if (!empty($ID)) {
 				$db->sfquery(array('SELECT * FROM `%s` WHERE quote LIKE "%%s%" AND owner_id = %s',MYSQL_TABLE,$QUERY,$ID));
 			} else {
