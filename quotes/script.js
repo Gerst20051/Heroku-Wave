@@ -207,7 +207,7 @@ doSearch: function(){
 						var quote = v.quote;
 						quotes += self.listQuote(v.id,quote.name,quote.quote);
 					});
-				} else {
+				} else if (p == "home") {
 					$.each(response, function(i,v){
 						var quote = v.quote;
 						quotes += self.addQuote(v.id,quote.name,quote.quote);
@@ -226,7 +226,12 @@ doSearch: function(){
 	}
 },
 handleHash: function(){
-	var self = this, p = Hash.get('p');
+	var self = this, p = Hash.get('p'), q = Hash.get('q');
+	if (2 < q.length) {
+		$("#search").val(Hash.get('q'));
+		doSearch();
+		return false;
+	}
 	if (p == "" || p == "global") {
 		$.getJSON(this.ajaxurl, {type:"global"}, function(response){
 			if ($.isArray(response)) {
