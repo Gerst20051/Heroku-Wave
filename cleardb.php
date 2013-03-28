@@ -5,7 +5,8 @@ $username = $url["user"];
 $password = $url["pass"];
 $db = substr($url["path"],1);
 
-print_r($url);
+echo "<pre>".print_r($url)."</pre>";
+echo "<p>/applications/xampp/xamppfiles/bin/mysql -u $user -p $db -h $server < heroku/hnswave/input.sql > heroku/hnswave/output.txt";
 
 $link = mysql_connect($server, $username, $password);
 

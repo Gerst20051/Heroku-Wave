@@ -1,0 +1,2 @@
+id	owner_id	quote	timestamp
+1	1	{"name":"Shakespeare","quote":"If music be the food of love, play on."}	1351413690
