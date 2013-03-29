@@ -8,7 +8,7 @@ $db = substr($url["path"],1);
 echo "<pre>";
 print_r($url);
 echo "</pre>";
-echo "<p>/applications/xampp/xamppfiles/bin/mysql -u $username -p $db -h $server < heroku/hnswave/input.sql > heroku/hnswave/output.txt</p>\n";
+echo "<p>/applications/xampp/xamppfiles/bin/mysql -u $username -p $db -h $server < ~/heroku/hnswave/input.sql > ~/heroku/hnswave/output.txt</p>\n";
 
 $link = mysql_connect($server, $username, $password);
 
