@@ -418,7 +418,7 @@ dom: function(){
 		var index = target.index();
 		var item = self.quotes[index];
 		var quote = item.quote;
-		if (confirm("Are you sure you want to delete "+quote.name+"?")) {
+		if (confirm("Are you sure you want to delete "+html_decode_entities(quote.name)+"?")) {
 			$.post(self.ajaxurl, {pid:item.id,type:2}, function(response){
 				if (stringToBoolean(response)) {
 					$("#quotes li:eq("+index+")").remove();
@@ -456,7 +456,7 @@ addQuote: function(id,name,quote){
 	html += '<header><aside class="links"><span class="savespan"><a href="#" class="save">save</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" class="undo">undo</a>&nbsp;&nbsp;|&nbsp;&nbsp;</span><a href="#" class="more">more</a><a href="#" class="less">less</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="#" class="delete">delete</a></aside><aside class="name">'+name+'</aside></header>';
 	html += '<div class="details">';
 	html += '<div><label for="name">name</label><input id="name" type="text" value="'+name+'"/></div>';
-	html += '<div><label for="quote">quote</label><textarea id="quote">'+stripSlashes(quote)+'</textarea></div>';
+	html += '<div><label for="quote">quote</label><textarea id="quote">'+quote+'</textarea></div>';
 	html += '</div></li>';
 	return html;
 },
@@ -464,7 +464,7 @@ listQuote: function(id,name,quote){
 	if (this.quotes.length < 2) $("#quotes").find('.empty').remove();
 	var html = '<li id="quote-'+id+'"><div class="quotelist">';
 	html += '<div class="quotename"><h2>'+name+'</h2></div>';
-	html += '<div class="quotequote">"'+stripSlashes(quote)+'"</div>';
+	html += '<div class="quotequote">"'+quote+'"</div>';
 	html += '</div></li>';
 	return html;
 }

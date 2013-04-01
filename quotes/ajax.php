@@ -151,6 +151,8 @@ if (!empty($UID) && !empty($PID) && !empty($TYPE)) {
 					if ($db->numRows()) {
 						$row = $db->fetchParsedRow();
 						$row["quote"] = json_decode($row["quote"]);
+						$row["quote"]->name = htmlentities($row["quote"]->name, ENT_QUOTES, "UTF-8");
+						$row["quote"]->quote = htmlentities($row["quote"]->quote, ENT_QUOTES, "UTF-8");
 						print_json($row);
 					} else die('0');
 				} else die('0');
@@ -255,6 +257,8 @@ if (!empty($TYPE)) {
 				$rows = $db->fetchParsedRows();
 				for ($i=0;$i<count($rows);$i++) {
 					$rows[$i]["quote"] = json_decode($rows[$i]["quote"]);
+					$rows[$i]["quote"]->name = htmlentities($rows[$i]["quote"]->name, ENT_QUOTES, "UTF-8");
+					$rows[$i]["quote"]->quote = htmlentities($rows[$i]["quote"]->quote, ENT_QUOTES, "UTF-8");
 				}
 				if ($db->numRows()) {
 					print_json(array_reverse($rows));
