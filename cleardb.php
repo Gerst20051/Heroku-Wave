@@ -5,6 +5,8 @@ $username = $url["user"];
 $password = $url["pass"];
 $db = substr($url["path"],1);
 
+echo getenv("CLEARDB_DATABASE_URL");
+
 echo "<pre>";
 print_r($url);
 echo "</pre>";

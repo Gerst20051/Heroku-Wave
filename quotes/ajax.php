@@ -224,10 +224,14 @@ if (!empty($TYPE)) {
 			//$rows = $db->fetchParsedAll(MYSQL_TABLE);
 			$db->query('SELECT * FROM '.MYSQL_TABLE);
 			$rows = $db->fetchParsedRows();
-			for ($i=0;$i<count($rows);$i++) {
-				$rows[$i]["quote"] = json_decode($rows[$i]["quote"]);
-			}
 			if ($db->numRows()) {
+				for ($i=0;$i<count($rows);$i++) {
+					$rows[$i]["quote"] = json_decode($rows[$i]["quote"]);
+					$owner_id = $rows[$i]["owner_id"];
+					$db->sfquery(array('SELECT firstname, lastname FROM `%s` WHERE uid = %s LIMIT 1',MYSQL_TABLE_USERS,$owner_id));
+					$row = $db->fetchParsedRow();
+					$rows[$i]["owner_name"] = $row["firstname"] . " " . $row["lastname"];
+				}
 				print_json(array_reverse($rows));
 			} else die('0');
 		} catch(Exception $e) {
@@ -267,6 +271,23 @@ if (!empty($TYPE)) {
 				echo $e->getMessage();
 				exit();
 			}
+		}
+	} elseif ($TYPE == 'quote') {
+		try {
+			$db = new MySQL();
+			$db->query('SELECT * FROM `'.MYSQL_TABLE.'` WHERE id = '.$QID);
+			$row = $db->fetchParsedRow();
+			if ($db->numRows()) {
+				$row["quote"] = json_decode($row["quote"]);
+				$owner_id = $row["owner_id"];
+				$db->sfquery(array('SELECT firstname, lastname FROM `%s` WHERE uid = %s LIMIT 1',MYSQL_TABLE_USERS,$owner_id));
+				$userrow = $db->fetchParsedRow();
+				$row["owner_name"] = $userrow["firstname"] . " " . $userrow["lastname"];
+				print_json(array($row));
+			} else die('0');
+		} catch(Exception $e) {
+			echo $e->getMessage();
+			exit();
 		}
 	}
 }

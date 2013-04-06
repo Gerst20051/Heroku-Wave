@@ -237,11 +237,36 @@ word-wrap:break-word;
 
 #quotes li .quotename {
 color:#a39c82;
+cursor:pointer;
+position:relative;
+}
+
+#quotes li .quotename:hover {
+color:#8f886c;
 }
 
 #quotes li .quotequote {
 text-align:justify;
 text-justify:inter-word;
+}
+
+#quotes li .quoteuser {
+position:absolute;
+right:0;
+top:0;
+}
+
+#quotes li .quoteuser .quoteowner {
+line-height:1.5;
+margin-right:30px;
+}
+
+#quotes li .quoteuser .blankprofile {
+height:20px;
+position:absolute;
+right:0;
+top:0;
+width:20px;
 }
 
 footer {

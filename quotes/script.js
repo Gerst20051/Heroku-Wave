@@ -226,7 +226,7 @@ doSearch: function(){
 	}
 },
 handleHash: function(){
-	var self = this, p = Hash.get('p'), q = Hash.get('q');
+	var self = this, p = Hash.get('p'), q = Hash.get('q'), qid = Hash.get('qid');
 	if (Hash.has('q') && 2 < q.length) {
 		$("#search").val(Hash.get('q'));
 		this.doSearch();
@@ -239,7 +239,7 @@ handleHash: function(){
 				var quotes = "";
 				$.each(response, function(i,v){
 					var quote = v.quote;
-					quotes += self.listQuote(v.id,quote.name,quote.quote);
+					quotes += self.listQuote(v.id,quote.name,quote.quote,v.owner_name);
 				});
 				$("#quotes").html(quotes);
 			} else {
@@ -290,7 +290,19 @@ handleHash: function(){
 				$("#quotes").html('<li class="empty">No Quotes</li>');
 			}
 		});
-	} else {
+	} else if (Hash.has('qid')) {
+			$.getJSON(this.ajaxurl, {type:"quote",qid:qid}, function(response){
+			if ($.isArray(response)) {
+				self.quotes = response;
+				var quotes = response[0];
+				var quote = quotes.quote;
+				quotes = self.listQuote(quotes.id,quote.name,quote.quote,quotes.owner_name);
+				$("#quotes").html(quotes);
+			} else {
+				$("#quotes").html('<li class="empty">Invalid Quote ID</li>');
+			}
+			});
+		}  {
 		$("#quotes").html('<li class="empty">No Quotes</li>');
 	}
 },
@@ -429,6 +441,26 @@ dom: function(){
 		}
 		return false;
 	});
+	quotes.on('click','.quotename',function(){
+		var target = $(this).parents('li');
+		var index = target.index();
+		var item = self.quotes[index];
+		Hash.clear();
+		Hash.set('p','quote');
+		Hash.set('qid',item.id);
+		self.handleHash();
+		return false;
+	});
+	quotes.on('click','.quoteowner',function(){
+		var target = $(this).parents('li');
+		var index = target.index();
+		var item = self.quotes[index];
+		Hash.clear();
+		Hash.set('p','user');
+		Hash.set('id',item.owner_id);
+		self.handleHash();
+		return false;
+	});
 	quotes.on('change','li input',function(){
 		$(this).parents('li').find('.savespan').show();
 	}).on('click','input',function(){
@@ -460,10 +492,14 @@ addQuote: function(id,name,quote){
 	html += '</div></li>';
 	return html;
 },
-listQuote: function(id,name,quote){
+listQuote: function(id,name,quote,owner_name){
 	if (this.quotes.length < 2) $("#quotes").find('.empty').remove();
 	var html = '<li id="quote-'+id+'"><div class="quotelist">';
-	html += '<div class="quotename"><h2>'+name+'</h2></div>';
+	if (owner_name) {
+		html += '<div class="quotename"><h2>'+name+'</h2><div class="quoteuser"><div class="quoteowner">'+owner_name+'</div><img class="blankprofile" src="blank_profile.gif"/></div></div>';
+	} else {
+		html += '<div class="quotename"><h2>'+name+'</h2></div>';
+	}
 	html += '<div class="quotequote">"'+quote+'"</div>';
 	html += '</div></li>';
 	return html;
