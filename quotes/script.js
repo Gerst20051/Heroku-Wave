@@ -205,7 +205,7 @@ doSearch: function(){
 				if (p == "" || p == "global" || p == "user") {
 					$.each(response, function(i,v){
 						var quote = v.quote;
-						quotes += self.listQuote(v.id,quote.name,quote.quote);
+						quotes += self.listQuote(v.id,quote.name,quote.quote,v.owner_name);
 					});
 				} else if (p == "home") {
 					$.each(response, function(i,v){

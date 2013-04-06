@@ -208,6 +208,10 @@ if ($ACTION == 'logged') {
 			$rows = $db->fetchParsedRows();
 			for ($i=0;$i<count($rows);$i++) {
 				$rows[$i]["quote"] = json_decode($rows[$i]["quote"]);
+					$owner_id = $rows[$i]["owner_id"];
+					$db->sfquery(array('SELECT firstname, lastname FROM `%s` WHERE uid = %s LIMIT 1',MYSQL_TABLE_USERS,$owner_id));
+					$row = $db->fetchParsedRow();
+					$rows[$i]["owner_name"] = $row["firstname"] . " " . $row["lastname"];
 			}
 			print_json(array_reverse($rows));
 		} else die('0');
